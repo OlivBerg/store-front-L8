@@ -33,7 +33,7 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_IMAGE_NAME: ${{ vars.DOCKER_IMAGE_NAME }}
         run: |
-          docker build -t $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:latest .
+          docker build -t $DOCKER_USERNAME/$DOCKER_IMAGE_NAME:test .
 
       - name: Push Docker Image
         env:
