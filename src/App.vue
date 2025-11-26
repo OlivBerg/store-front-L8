@@ -81,7 +81,7 @@ export default {
 
       console.log(JSON.stringify(order));
 
-      // call the order-service using fetch
+      // call the order-service using fetchh
       fetch(`/order`, {
         method: 'POST',
         headers: {
