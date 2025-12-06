@@ -1,282 +1,243 @@
 <template>
-  <TopNav :cartItemCount="cartItemCount"/>
-  <router-view
-    :products="products"
-    :cartItems="cartItems"
-    @addToCart="addToCart"
-    @removeFromCart="removeFromCart"
-    @submitOrder="submitOrder"
-  ></router-view>
+  <div class="app-container">
+    <TopNav :cartItemCount="cartItemCount" />
+
+    <div class="main-content">
+      <router-view
+        :products="products"
+        :cartItems="cartItems"
+        @addToCart="addToCart"
+        @removeFromCart="removeFromCart"
+        @submitOrder="submitOrder"
+      ></router-view>
+    </div>
+
+    <footer class="bby-footer">
+      <div class="footer-links">
+        <span>Accessibility</span>
+        <span>Terms & Conditions</span>
+        <span>Privacy</span>
+        <span>Interest-Based Ads</span>
+      </div>
+      <p class="copyright">© 2023 Best Buy. All rights reserved.</p>
+    </footer>
+  </div>
 </template>
 
 <script>
-import TopNav from './components/TopNav.vue'
+import TopNav from "./components/TopNav.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    TopNav
+    TopNav,
   },
   data() {
     return {
       cartItems: [],
       products: [],
-    }
+    };
   },
   computed: {
     cartItemCount() {
       return this.cartItems.reduce((total, item) => {
-        return total + item.quantity
-      }, 0)
-    }
+        return total + item.quantity;
+      }, 0);
+    },
   },
   mounted() {
-    this.getProducts()
+    this.getProducts();
   },
   methods: {
     getProducts() {
-      fetch('/products')
-        .then(response => response.json())
-        .then(products => {
-          console.log('success getting proxy products')
-          this.products = products
+      fetch("/products")
+        .then((response) => response.json())
+        .then((products) => {
+          console.log("success getting proxy products");
+          this.products = products;
         })
-        .catch(error => {
-          console.log(error)
-          alert('Error occurred while fetching products')
-        })
+        .catch((error) => {
+          console.log(error);
+          // Removed alert for cleaner UX, log instead
+          console.error("Error occurred while fetching products");
+        });
     },
     addToCart({ productId, quantity }) {
-      // check if the product is already in the carttt
       const existingCartItem = this.cartItems.find(
-        item => item.product.id == productId
-      )
+        (item) => item.product.id == productId
+      );
       if (existingCartItem) {
-        // if it is, increment the quantity
-        existingCartItem.quantity += quantity
+        existingCartItem.quantity += quantity;
       } else {
-        // if not, find the product, and add it with quantity to the cart
-        const product = this.products.find(product => product.id == productId)
-        this.cartItems.push({ product, quantity })
+        const product = this.products.find(
+          (product) => product.id == productId
+        );
+        this.cartItems.push({ product, quantity });
       }
     },
     removeFromCart(index) {
-      this.cartItems.splice(index, 1)
+      this.cartItems.splice(index, 1);
     },
     submitOrder() {
-      // get the order-service URL from an environment variable
-      // const orderServiceUrl = process.env.VUE_APP_ORDER_SERVICE_URL;
-
-      // create an order object
       const order = {
         customerId: Math.floor(Math.random() * 10000000000).toString(),
-        items: this.cartItems.map(item => {
+        items: this.cartItems.map((item) => {
           return {
             productId: item.product.id,
             quantity: item.quantity,
-            price: item.product.price
-          }
-        })
-      }
+            price: item.product.price,
+          };
+        }),
+      };
 
       console.log(JSON.stringify(order));
 
-      // call the order-service using fetchh
       fetch(`/order`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(order)
+        body: JSON.stringify(order),
       })
-        .then(response => {
-          console.log(response)
+        .then((response) => {
+          console.log(response);
           if (!response.ok) {
-            alert('Error occurred while submitting order')
+            alert("Error occurred while submitting order");
           } else {
-            this.cartItems = []
-            alert('Order submitted successfully')
+            this.cartItems = [];
+            alert("Order submitted successfully");
           }
         })
-        .catch(error => {
-          console.log(error)
-          alert('Error occurred while submitting order')
-        })
-    }
+        .catch((error) => {
+          console.log(error);
+          alert("Error occurred while submitting order");
+        });
+    },
   },
-}
+};
 </script>
 
 <style>
-body {
-  background-image: url('@/assets/algonquin.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed; /* Keeps the background in place when scrolling */
-  margin: 0;
-  padding: 0;
+/* 
+  GLOBAL STYLES 
+  These apply to the entire application to override browser defaults
+  and set the "Best Buy" theme base.
+*/
+
+:root {
+  --bby-blue: #0046be;
+  --bby-yellow: #ffe000;
+  --bby-dark-blue: #001e73;
+  --text-primary: #1d252c;
+  --bg-color: #f0f2f4;
 }
 
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  font-family: "Human BBY", Arial, Helvetica, sans-serif; /* Fallback to standard fonts */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 120px;
+  color: var(--text-primary);
 }
 
-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #0a5620;
-  color: #fff;
-  padding: 1rem;
-  margin: 0;
-}
-
-nav {
+/* Ensure footer stays at bottom */
+.app-container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-ul {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.main-content {
+  flex: 1; /* Pushes footer down */
+  /* Remove the margin-top 120px as TopNav is likely sticky or sized correctly now */
+  width: 100%;
 }
 
-li {
-  margin: 0 1rem;
-}
-
-a {
-  color: #fff;
-  text-decoration: none;
-}
+/* 
+  RESET / BASE ELEMENTS
+  Overriding the generic button/input styles to match the brand
+*/
 
 button {
-  padding: 10px;
-  background-color: #005f8b;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
   cursor: pointer;
-  height: 42px;
+  font-family: inherit;
 }
 
-.product-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
-.product-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  margin: 1rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-.product-card img {
-  max-width: 100%;
-  margin-bottom: 1rem;
-}
-
-.product-card a {
+/* Common text link style */
+a {
+  color: var(--bby-blue);
   text-decoration: none;
-  color: #333;
 }
 
-.product-card h2 {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+a:hover {
+  text-decoration: underline;
 }
 
-.product-card p {
-  margin-bottom: 1rem;
+/* 
+  FOOTER STYLES 
+  Simple, grey background footer typical of corporate sites
+*/
+.bby-footer {
+  background-color: #f4f6f8;
+  border-top: 1px solid #c5cbd5;
+  color: #555;
+  padding: 40px 20px;
+  text-align: center;
+  margin-top: 40px;
 }
 
-.product-controls {
+.footer-links {
   display: flex;
-  align-items: center;
-  margin-top: 0.5rem;
-}
-
-.product-controls p {
-  margin-right: 20px;
-}
-
-.product-controls button:hover {
-  background-color: #005f8b;
-}
-
-.product-price {
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-.quantity-input {
-  width: 50px;
-  height: 30px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 5px;
-  margin-right: 10px;
-}
-
-.shopping-cart {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-.shopping-cart h2 {
-  font-size: 24px;
+  justify-content: center;
+  gap: 20px;
   margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--bby-blue);
 }
 
-.shopping-cart-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.shopping-cart-table th,
-.shopping-cart-table td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-.shopping-cart-table th {
-  font-weight: bold;
-}
-
-.shopping-cart-table td img {
-  display: block;
-  margin: 0 auto;
-}
-
-.checkout-button {
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007acc;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
+.footer-links span {
   cursor: pointer;
 }
 
-.checkout-button:hover {
-  background-color: #005f8b;
+.footer-links span:hover {
+  text-decoration: underline;
+}
+
+.copyright {
+  font-size: 11px;
+  color: #1d252c;
+}
+
+/* 
+  UTILITY CLASSES
+  These might be used by child components if scoped styles aren't enough
+*/
+
+/* Quantity Input Standard */
+.quantity-input {
+  border: 1px solid #c5cbd5;
+  border-radius: 4px;
+  padding: 8px;
+  width: 60px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Primary Button Standard (Add to Cart / Checkout) */
+button.primary-action {
+  background-color: var(--bby-yellow);
+  color: var(--bby-dark-blue);
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 15px;
+  transition: background-color 0.2s ease;
+}
+
+button.primary-action:hover {
+  background-color: #fff200;
 }
 </style>
