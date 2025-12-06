@@ -36,14 +36,12 @@
 
         <div class="fulfillment-options">
           <div class="fulfillment-item">
-            <span class="icon">store</span>
             <div>
               <strong>Pickup:</strong>
               <span class="fulfillment-text">Ready in 1 hour</span>
             </div>
           </div>
           <div class="fulfillment-item">
-            <span class="icon">local_shipping</span>
             <div>
               <strong>Shipping:</strong>
               <span class="fulfillment-text">Free 2-day shipping</span>

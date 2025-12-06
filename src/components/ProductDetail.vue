@@ -19,9 +19,13 @@
             <span class="meta-label">SKU:</span>
             <span class="meta-value">{{ product.id }}</span>
           </div>
-          <div class="rating-stars">
-            ★★★★☆ <span class="count">(4,102)</span>
-          </div>
+          <span
+            class="stars"
+            :aria-label="`Rating: ${product.rating} out of 5 stars`"
+          >
+            {{ getStarString(product.rating) }}
+          </span>
+          <span class="review-count">({{ product.reviews }})</span>
         </div>
       </div>
 
@@ -55,6 +59,9 @@
               <span class="price-decimal">{{
                 (product.price % 1).toFixed(2).substring(1)
               }}</span>
+              <span class="saving-badge" v-if="product.discount > 0">
+                Save ${{ Number(product.discount).toFixed(2) }}
+              </span>
             </div>
 
             <div class="fulfillment-promise">
@@ -63,7 +70,7 @@
                 <div>
                   <strong>Pickup:</strong>
                   <span class="green-text">Ready in 1 hour</span><br />
-                  <span class="sub-text">at Aventura, FL</span>
+                  <span class="sub-text">at Ottawa, Ont</span>
                 </div>
               </div>
               <div class="fulfillment-row">
@@ -142,6 +149,17 @@ export default {
         productId: this.product.id,
         quantity: this.quantity,
       });
+    },
+    getStarString(rating) {
+      // Default to 0 if rating is missing
+      const score = rating || 0;
+
+      // Create a string of stars based on the score
+      // Math.round ensures 4.6 becomes 5 stars, 4.2 becomes 4 stars
+      const stars = "★★★★★".slice(0, Math.round(score));
+      const empty = "☆☆☆☆☆".slice(0, 5 - Math.round(score));
+
+      return stars + empty;
     },
   },
 };
@@ -406,6 +424,22 @@ export default {
   font-weight: 700;
   display: inline-block;
   margin-top: 20px;
+}
+.saving-badge {
+  background-color: #bb0628;
+  color: white;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.stars {
+  color: #ffe000; /* Best Buy Yellow for stars (sometimes replaced by blue in newer designs) */
+  /* Forcing a text-shadow to make yellow pop on white */
+  text-shadow: 0px 0px 1px #e0a300;
+  margin-right: 5px;
+  font-size: 16px;
 }
 
 /* Mobile Responsiveness */

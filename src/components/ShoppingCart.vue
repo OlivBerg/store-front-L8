@@ -31,11 +31,11 @@
             <div class="fulfillment-toggles">
               <label class="radio-container">
                 <input type="radio" checked disabled />
-                <span class="radio-label">Pickup at Aventura</span>
+                <span class="radio-label">Pickup at Ottawa Location</span>
               </label>
               <label class="radio-container">
                 <input type="radio" disabled />
-                <span class="radio-label">Shipping to 33180</span>
+                <span class="radio-label">Shipping to k1v0c9</span>
               </label>
             </div>
 
@@ -63,7 +63,7 @@
             <span>${{ cartTotal }}</span>
           </div>
           <div class="summary-row">
-            <span>Savings</span>
+            <span>Savings - JK dont feel like calculating that</span>
             <span>-$0.00</span>
           </div>
           <div class="summary-row">

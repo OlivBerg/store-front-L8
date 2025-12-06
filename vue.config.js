@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 const bodyParser = require("body-parser");
 
 const PRODUCT_SERVICE_URL =
-  process.env.VUE_APP_PRODUCT_SERVICE_URL || "http://127.0.0.1:3002/";
+  process.env.VUE_APP_PRODUCT_SERVICE_URL || "http://172.19.0.2:3002/";
 const ORDER_SERVICE_URL =
   process.env.VUE_APP_ORDER_SERVICE_URL || "http://172.19.0.5:3000/";
 
