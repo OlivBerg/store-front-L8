@@ -19,7 +19,7 @@
         <span>Privacy</span>
         <span>Interest-Based Ads</span>
       </div>
-      <p class="copyright">© 2023 Best Buy. All rights reserved.</p>
+      <p class="copyright">© 2025 not Best Buy. All rights reserved.</p>
     </footer>
   </div>
 </template>
@@ -118,12 +118,6 @@ export default {
 </script>
 
 <style>
-/* 
-  GLOBAL STYLES 
-  These apply to the entire application to override browser defaults
-  and set the "Best Buy" theme base.
-*/
-
 :root {
   --bby-blue: #0046be;
   --bby-yellow: #ffe000;
@@ -209,11 +203,6 @@ a:hover {
   font-size: 11px;
   color: #1d252c;
 }
-
-/* 
-  UTILITY CLASSES
-  These might be used by child components if scoped styles aren't enough
-*/
 
 /* Quantity Input Standard */
 .quantity-input {
