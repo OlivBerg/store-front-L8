@@ -19,7 +19,7 @@
         <span>Privacy</span>
         <span>Interest-Based Ads</span>
       </div>
-      <p class="copyright">© 2025 not Best Buy. All rights reserved.</p>
+      <p class="copyright">© 2025 Best Buy. All rights reserved.</p>
     </footer>
   </div>
 </template>
